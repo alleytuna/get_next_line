@@ -6,59 +6,12 @@
 /*   By: aaltun <aaltun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 09:44:28 by aaltun            #+#    #+#             */
-/*   Updated: 2020/11/17 15:43:54 by aaltun           ###   ########.fr       */
+/*   Updated: 2020/11/25 21:24:52 by aaltun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	ft_putchar_fd(char c, int fd)
-{
-	write(fd, &c, 1);
-}
-
-void	ft_putstr_fd(char *str, int fd)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return ;
-	while (str[i] != '\0')
-	{
-		ft_putchar_fd(str[i], fd);
-		i++;
-	}
-}
-
-void	*ft_memset(void *ptr, int value, size_t len)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < len)
-	{
-		((char *)ptr)[i] = value;
-		i++;
-	}
-	return (ptr);
-}
-
-char	*ft_strchr(const char *str, int search)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] == search)
-			return ((char *)&str[i]);
-		i++;
-	}
-	if (search == '\0')
-		return ((char *)&str[i]);
-	return (NULL);
-}
 
 int	ft_strlen(const char *str)
 {
