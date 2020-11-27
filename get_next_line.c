@@ -6,13 +6,13 @@
 /*   By: aaltun <aaltun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 15:35:54 by aaltun            #+#    #+#             */
-/*   Updated: 2020/11/25 21:49:34 by aaltun           ###   ########.fr       */
+/*   Updated: 2020/11/27 18:49:38 by aaltun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-#define BUFF_SIZE 100
+#define BUFF_SIZE 4
 
 int find_backslash(char *str)
 {
@@ -43,8 +43,8 @@ int get_next_line(int fd, char **line)
     }
     if (statiq != NULL && find_backslash(statiq) >= 0)
     {
-        *line = ft_substr(statiq, 0, find_backslash(statiq) + 1);
-        remainder_len = ft_strlen(statiq) - find_backslash(statiq) + 1;
+        *line = ft_substr(statiq, 0, find_backslash(statiq));
+        remainder_len = ft_strlen(statiq) - (find_backslash(statiq) + 1);
         tmp = ft_substr(statiq, find_backslash(statiq) + 1, remainder_len);
         free(statiq);
         statiq = ft_strdup(tmp);
@@ -58,8 +58,8 @@ int get_next_line(int fd, char **line)
         free(statiq);
         if (find_backslash(tmp) >= 0)
         {
-            *line = ft_substr(tmp, 0, find_backslash(tmp) + 1);
-            remainder_len = ft_strlen(tmp) - find_backslash(tmp);
+            *line = ft_substr(tmp, 0, find_backslash(tmp));
+            remainder_len = ft_strlen(tmp) - (find_backslash(tmp) + 1);
             statiq = ft_substr(tmp, find_backslash(tmp) + 1, remainder_len);
             free(tmp);
             return (1);
@@ -70,21 +70,23 @@ int get_next_line(int fd, char **line)
             free(tmp);
         }
     }
+    free(line);
+    *line = NULL;
     return (0);
 }
 
-int main()
+/*int main()
 {
-    int  fd;
+    int fd;
     char *line;
 
     fd = open("test.txt", O_RDONLY);
-    while (get_next_line(fd, &line) >= 0)
+    while (get_next_line(fd, &line) > 0)
     {
-        printf("get next line : %s-", line);
+        printf("get next line : %s-\n", line);
         free(line);
-      //getchar(); //permet avoir une pause dans l'execution
+        //getchar(); //permet avoir une pause dans l'execution
     }
-    close (fd);
+    close(fd);
     return (0);
-}
+}*/
