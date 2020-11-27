@@ -6,13 +6,11 @@
 /*   By: aaltun <aaltun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 15:35:54 by aaltun            #+#    #+#             */
-/*   Updated: 2020/11/27 18:49:38 by aaltun           ###   ########.fr       */
+/*   Updated: 2020/11/27 19:52:42 by aaltun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-#define BUFF_SIZE 4
 
 int find_backslash(char *str)
 {
@@ -32,11 +30,11 @@ int get_next_line(int fd, char **line)
 {
     static char *statiq;
     char *tmp;
-    char buf[BUFF_SIZE + 1];
+    char buf[BUFFER_SIZE + 1];
     int remainder_len;
     int rd_ret;
 
-    if (fd < 0 || fd > 256 || BUFF_SIZE > 100000000 || BUFF_SIZE <= 0)
+    if (fd < 0 || fd > 256 || BUFFER_SIZE > 100000000 || BUFFER_SIZE <= 0)
     {
         *line = NULL;
         return (-1);
@@ -51,7 +49,7 @@ int get_next_line(int fd, char **line)
         free(tmp);
         return (1);
     }
-    while ((rd_ret = read(fd, buf, BUFF_SIZE)) > 0)
+    while ((rd_ret = read(fd, buf, BUFFER_SIZE)) > 0)
     {
         buf[rd_ret] = '\0';
         tmp = ft_strjoin(statiq, buf);
@@ -70,7 +68,6 @@ int get_next_line(int fd, char **line)
             free(tmp);
         }
     }
-    free(line);
     *line = NULL;
     return (0);
 }
