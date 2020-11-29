@@ -6,7 +6,7 @@
 /*   By: aaltun <aaltun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 09:44:28 by aaltun            #+#    #+#             */
-/*   Updated: 2020/11/25 22:27:34 by aaltun           ###   ########.fr       */
+/*   Updated: 2020/11/30 00:25:29 by aaltun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,7 @@ char	*ft_strdup(const char *src)
 	i = 0;
 	while (src[len] != '\0')
 		len++;
-	dst = (char*)malloc(sizeof(*dst) * len + 1);
-	if (dst == NULL)
+	if (!(dst = (char*)malloc(sizeof(*dst) * len + 1)))
 		return (NULL);
 	while (i < len)
 	{

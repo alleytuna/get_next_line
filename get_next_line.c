@@ -6,7 +6,7 @@
 /*   By: aaltun <aaltun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 15:35:54 by aaltun            #+#    #+#             */
-/*   Updated: 2020/11/27 18:49:38 by aaltun           ###   ########.fr       */
+/*   Updated: 2020/11/30 00:28:17 by aaltun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,13 @@ int get_next_line(int fd, char **line)
     while ((rd_ret = read(fd, buf, BUFF_SIZE)) > 0)
     {
         buf[rd_ret] = '\0';
+        if (rd_ret < BUFF_SIZE)
+        {
+            buf[rd_ret] = '\n';
+            buf[rd_ret + 1] = '\0';
+        }
         tmp = ft_strjoin(statiq, buf);
-        free(statiq);
+        free (statiq);
         if (find_backslash(tmp) >= 0)
         {
             *line = ft_substr(tmp, 0, find_backslash(tmp));
@@ -70,12 +75,14 @@ int get_next_line(int fd, char **line)
             free(tmp);
         }
     }
-    free(line);
-    *line = NULL;
-    return (0);
+    *line = ft_strdup(statiq);
+    statiq[0] = '\0';
+    if (*line[0] == '\0')
+        return (0);
+    return (1);
 }
 
-/*int main()
+int main()
 {
     int fd;
     char *line;
@@ -87,6 +94,5 @@ int get_next_line(int fd, char **line)
         free(line);
         //getchar(); //permet avoir une pause dans l'execution
     }
-    close(fd);
     return (0);
-}*/
+}
