@@ -6,13 +6,13 @@
 /*   By: aaltun <aaltun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 15:35:54 by aaltun            #+#    #+#             */
-/*   Updated: 2020/11/30 00:28:17 by aaltun           ###   ########.fr       */
+/*   Updated: 2020/11/30 00:57:55 by aaltun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-#define BUFF_SIZE 4
+#define BUFFER_SIZE 1024
 
 int find_backslash(char *str)
 {
@@ -32,11 +32,11 @@ int get_next_line(int fd, char **line)
 {
     static char *statiq;
     char *tmp;
-    char buf[BUFF_SIZE + 1];
+    char buf[BUFFER_SIZE + 1];
     int remainder_len;
     int rd_ret;
 
-    if (fd < 0 || fd > 256 || BUFF_SIZE > 100000000 || BUFF_SIZE <= 0)
+    if (fd < 0 || fd > 256 || BUFFER_SIZE > 100000000 || BUFFER_SIZE <= 0)
     {
         *line = NULL;
         return (-1);
@@ -51,10 +51,10 @@ int get_next_line(int fd, char **line)
         free(tmp);
         return (1);
     }
-    while ((rd_ret = read(fd, buf, BUFF_SIZE)) > 0)
+    while ((rd_ret = read(fd, buf, BUFFER_SIZE)) > 0)
     {
         buf[rd_ret] = '\0';
-        if (rd_ret < BUFF_SIZE)
+        if (rd_ret < BUFFER_SIZE)
         {
             buf[rd_ret] = '\n';
             buf[rd_ret + 1] = '\0';
@@ -76,9 +76,9 @@ int get_next_line(int fd, char **line)
         }
     }
     *line = ft_strdup(statiq);
-    statiq[0] = '\0';
     if (*line[0] == '\0')
         return (0);
+    statiq[0] = '\0';
     return (1);
 }
 
@@ -87,7 +87,7 @@ int main()
     int fd;
     char *line;
 
-    fd = open("test.txt", O_RDONLY);
+    fd = open("salut.txt", O_RDONLY);
     while (get_next_line(fd, &line) > 0)
     {
         printf("get next line : %s-\n", line);
