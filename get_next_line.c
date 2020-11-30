@@ -54,11 +54,6 @@ int get_next_line(int fd, char **line)
     while ((rd_ret = read(fd, buf, BUFFER_SIZE)) > 0)
     {
         buf[rd_ret] = '\0';
-        if (rd_ret < BUFFER_SIZE)
-        {
-            buf[rd_ret] = '\n';
-            buf[rd_ret + 1] = '\0';
-        }
         tmp = ft_strjoin(statiq, buf);
         free (statiq);
         if (find_backslash(tmp) >= 0)
@@ -76,10 +71,7 @@ int get_next_line(int fd, char **line)
         }
     }
     *line = ft_strdup(statiq);
-    if (*line[0] == '\0')
-        return (0);
-    statiq[0] = '\0';
-    return (1);
+    return (0);
 }
 
 int main()
