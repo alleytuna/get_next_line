@@ -6,13 +6,11 @@
 /*   By: aaltun <aaltun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 15:35:54 by aaltun            #+#    #+#             */
-/*   Updated: 2020/11/30 00:57:55 by aaltun           ###   ########.fr       */
+/*   Updated: 2020/12/01 00:07:31 by aaltun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-#define BUFFER_SIZE 1024
 
 int find_backslash(char *str)
 {
@@ -36,11 +34,11 @@ int get_next_line(int fd, char **line)
     int remainder_len;
     int rd_ret;
 
-    if (fd < 0 || fd > 256 || BUFFER_SIZE > 100000000 || BUFFER_SIZE <= 0)
+    if (fd < 0 || !line || BUFFER_SIZE <= 0 || read(fd, buf, 0) < 0) 
     {
-        *line = NULL;
         return (-1);
     }
+    *line = ft_strdup("");
     if (statiq != NULL && find_backslash(statiq) >= 0)
     {
         *line = ft_substr(statiq, 0, find_backslash(statiq));
@@ -70,11 +68,16 @@ int get_next_line(int fd, char **line)
             free(tmp);
         }
     }
-    *line = ft_strdup(statiq);
+    if (statiq != NULL)
+    {
+        *line = ft_strdup(statiq);
+        free(statiq);
+        statiq = NULL;
+    }
     return (0);
 }
 
-int main()
+/*int main()
 {
     int fd;
     char *line;
@@ -88,3 +91,4 @@ int main()
     }
     return (0);
 }
+*/
