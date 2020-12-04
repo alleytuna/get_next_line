@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aaltun <aaltun@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/26 15:35:54 by aaltun            #+#    #+#             */
-/*   Updated: 2020/12/01 00:07:31 by aaltun           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
 int find_backslash(char *str)
@@ -26,47 +14,56 @@ int find_backslash(char *str)
 	return (-1);
 }
 
+char	*str_has_n(char **line, char *str)
+{
+	int remainder_len;
+	char *temp;
+
+    *line = ft_substr(str, 0, find_backslash(str));
+    remainder_len = ft_strlen(str) - (find_backslash(str) + 1);
+	temp = ft_substr(str, find_backslash(str) + 1, remainder_len);
+	free(str);
+	return (temp);
+}
+
+int ft_read(int rd_ret, char *buf, char **statiq, char **line)
+{
+    char * tmp;
+
+    buf[rd_ret] = '\0';
+    tmp = ft_strjoin(*statiq, buf);
+    free (*statiq);
+    if (find_backslash(tmp) >= 0)
+    {
+        *statiq = ft_strdup(str_has_n(line, tmp));
+        return (1);
+    }
+    else
+    {
+        *statiq = ft_strdup(tmp);
+        free(tmp);
+    }
+    return (0);
+}
+
 int get_next_line(int fd, char **line)
 {
-    static char *statiq;
-    char *tmp;
+    static char *statiq = NULL;
     char buf[BUFFER_SIZE + 1];
-    int remainder_len;
     int rd_ret;
 
-    if (fd < 0 || !line || BUFFER_SIZE <= 0 || read(fd, buf, 0) < 0) 
-    {
+    if (fd < 0 || !line || BUFFER_SIZE <= 0 || read(fd, buf, 0) < 0)
         return (-1);
-    }
     *line = ft_strdup("");
     if (statiq != NULL && find_backslash(statiq) >= 0)
     {
-        *line = ft_substr(statiq, 0, find_backslash(statiq));
-        remainder_len = ft_strlen(statiq) - (find_backslash(statiq) + 1);
-        tmp = ft_substr(statiq, find_backslash(statiq) + 1, remainder_len);
-        free(statiq);
-        statiq = ft_strdup(tmp);
-        free(tmp);
+        statiq = ft_strdup(str_has_n(line, statiq));
         return (1);
     }
     while ((rd_ret = read(fd, buf, BUFFER_SIZE)) > 0)
     {
-        buf[rd_ret] = '\0';
-        tmp = ft_strjoin(statiq, buf);
-        free (statiq);
-        if (find_backslash(tmp) >= 0)
-        {
-            *line = ft_substr(tmp, 0, find_backslash(tmp));
-            remainder_len = ft_strlen(tmp) - (find_backslash(tmp) + 1);
-            statiq = ft_substr(tmp, find_backslash(tmp) + 1, remainder_len);
-            free(tmp);
+        if (ft_read(rd_ret, buf, &statiq, line) == 1)
             return (1);
-        }
-        else
-        {
-            statiq = ft_strdup(tmp);
-            free(tmp);
-        }
     }
     if (statiq != NULL)
     {
@@ -77,18 +74,18 @@ int get_next_line(int fd, char **line)
     return (0);
 }
 
-/*int main()
+int main()
 {
     int fd;
     char *line;
 
-    fd = open("salut.txt", O_RDONLY);
+    fd = open("test.txt", O_RDONLY);
     while (get_next_line(fd, &line) > 0)
     {
         printf("get next line : %s-\n", line);
         free(line);
         //getchar(); //permet avoir une pause dans l'execution
     }
+    printf("get next line : %s-\n", line);
     return (0);
 }
-*/
