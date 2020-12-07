@@ -6,14 +6,13 @@
 /*   By: aaltun <aaltun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 09:44:28 by aaltun            #+#    #+#             */
-/*   Updated: 2020/11/30 00:25:29 by aaltun           ###   ########.fr       */
+/*   Updated: 2020/12/07 20:56:13 by aaltun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-
-int	ft_strlen(const char *str)
+int		ft_strlen(const char *str)
 {
 	unsigned int	length;
 
@@ -56,9 +55,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (ft_strdup(s2));
 	if (!s2 && s1)
 		return (ft_strdup(s1));
-	if (!s1 && !s2)
-		return (NULL);
-	if (!(dst = malloc(sizeof(*dst) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
+	if ((!s1 && !s2) ||
+	!(dst = malloc(sizeof(*dst) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
 		return (NULL);
 	while (s1[i] != '\0')
 	{
