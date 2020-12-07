@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaltun <aaltun@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/07 15:09:13 by aaltun            #+#    #+#             */
+/*   Updated: 2020/12/07 17:09:53 by aaltun           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 #define BUFFER_SIZE 1000005
@@ -48,6 +60,12 @@ int ft_read(int rd_ret, char *buf, char **statiq, char **line)
     buf[rd_ret] = '\0';
     tmp = ft_strjoin(*statiq, buf);
     free (*statiq);
+    if (tmp == '\0')
+    {
+        *line = ft_strdup("");
+        free(tmp);
+        return(1);
+    }
     if (find_backslash(tmp) >= 0)
     {
         return (tmp_has_n(line, statiq, &tmp));
@@ -68,7 +86,6 @@ int get_next_line(int fd, char **line)
 
     if (fd < 0 || !line || BUFFER_SIZE <= 0 || read(fd, buf, 0) < 0)
         return (-1);
-    *line = ft_strdup("");
     if (statiq != NULL && find_backslash(statiq) >= 0)
     {
         return (str_has_n(line, &statiq));
@@ -97,8 +114,11 @@ int main()
     {
         printf("get next line : %s-\n", line);
         free(line);
-        //getchar(); //permet avoir une pause dans l'execution
+        // getchar(); //permet avoir une pause dans l'execution
     }
     printf("get next line : %s-\n", line);
+    //getchar();
+    free(line);
+    close (fd);
     return (0);
 }
