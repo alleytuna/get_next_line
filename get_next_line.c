@@ -1,5 +1,7 @@
 #include "get_next_line.h"
 
+#define BUFFER_SIZE 1000005
+
 int find_backslash(char *str)
 {
     unsigned int	i;
@@ -14,16 +16,29 @@ int find_backslash(char *str)
 	return (-1);
 }
 
-char	*str_has_n(char **line, char *str)
+int	str_has_n(char **line, char **str)
 {
 	int remainder_len;
 	char *temp;
 
-    *line = ft_substr(str, 0, find_backslash(str));
-    remainder_len = ft_strlen(str) - (find_backslash(str) + 1);
-	temp = ft_substr(str, find_backslash(str) + 1, remainder_len);
-	free(str);
-	return (temp);
+    *line = ft_substr(*str, 0, find_backslash(*str));
+    remainder_len = ft_strlen(*str) - (find_backslash(*str) + 1);
+	temp = ft_substr(*str, find_backslash(*str) + 1, remainder_len);
+	free(*str);
+    *str = ft_strdup(temp);
+    free(temp);
+    return (1);
+}
+
+int	tmp_has_n(char ***line, char ***statiq, char **tmp)
+{
+	int remainder_len;
+
+    **line = ft_substr(*tmp, 0, find_backslash(*tmp));
+    remainder_len = ft_strlen(*tmp) - (find_backslash(*tmp) + 1);
+    **statiq = ft_substr(*tmp, find_backslash(*tmp) + 1, remainder_len);
+    free(*tmp);
+    return (1);
 }
 
 int ft_read(int rd_ret, char *buf, char **statiq, char **line)
@@ -35,8 +50,7 @@ int ft_read(int rd_ret, char *buf, char **statiq, char **line)
     free (*statiq);
     if (find_backslash(tmp) >= 0)
     {
-        *statiq = ft_strdup(str_has_n(line, tmp));
-        return (1);
+        return (tmp_has_n(line, &statiq, &tmp));
     }
     else
     {
@@ -57,16 +71,16 @@ int get_next_line(int fd, char **line)
     *line = ft_strdup("");
     if (statiq != NULL && find_backslash(statiq) >= 0)
     {
-        statiq = ft_strdup(str_has_n(line, statiq));
-        return (1);
+        return (str_has_n(line, &statiq));
     }
     while ((rd_ret = read(fd, buf, BUFFER_SIZE)) > 0)
     {
-        if (ft_read(rd_ret, buf, &statiq, line) == 1)
+        if (ft_read(rd_ret, buf, &statiq, &line) == 1)
             return (1);
     }
     if (statiq != NULL)
     {
+        free(line);
         *line = ft_strdup(statiq);
         free(statiq);
         statiq = NULL;
