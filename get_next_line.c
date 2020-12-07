@@ -30,13 +30,13 @@ int	str_has_n(char **line, char **str)
     return (1);
 }
 
-int	tmp_has_n(char ***line, char ***statiq, char **tmp)
+int	tmp_has_n(char **line, char **statiq, char **tmp)
 {
 	int remainder_len;
 
-    **line = ft_substr(*tmp, 0, find_backslash(*tmp));
+    *line = ft_substr(*tmp, 0, find_backslash(*tmp));
     remainder_len = ft_strlen(*tmp) - (find_backslash(*tmp) + 1);
-    **statiq = ft_substr(*tmp, find_backslash(*tmp) + 1, remainder_len);
+    *statiq = ft_substr(*tmp, find_backslash(*tmp) + 1, remainder_len);
     free(*tmp);
     return (1);
 }
@@ -50,7 +50,7 @@ int ft_read(int rd_ret, char *buf, char **statiq, char **line)
     free (*statiq);
     if (find_backslash(tmp) >= 0)
     {
-        return (tmp_has_n(line, &statiq, &tmp));
+        return (tmp_has_n(line, statiq, &tmp));
     }
     else
     {
@@ -75,12 +75,11 @@ int get_next_line(int fd, char **line)
     }
     while ((rd_ret = read(fd, buf, BUFFER_SIZE)) > 0)
     {
-        if (ft_read(rd_ret, buf, &statiq, &line) == 1)
+        if (ft_read(rd_ret, buf, &statiq, line) == 1)
             return (1);
     }
     if (statiq != NULL)
     {
-        free(line);
         *line = ft_strdup(statiq);
         free(statiq);
         statiq = NULL;
