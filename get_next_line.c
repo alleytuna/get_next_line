@@ -58,12 +58,6 @@ int	ft_read(int rd_ret, char *buf, char **statiq, char **line)
 	buf[rd_ret] = '\0';
 	tmp = ft_strjoin(*statiq, buf);
 	free(*statiq);
-	if (tmp[0] == '\0')
-	{
-		*line = ft_strdup("");
-		free(tmp);
-		return (1);
-	}
 	if (find_backslash(tmp) >= 0)
 	{
 		return (tmp_has_n(line, statiq, &tmp));
